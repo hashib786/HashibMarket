@@ -53,6 +53,7 @@ const userSchema = new Schema<IUser>(
         values: ["user"],
         message: "enum validator failed for path `{PATH}` with value `{VALUE}`",
       }, // Example of enum validation
+      default: "user",
     },
     address: {
       type: String,
@@ -88,6 +89,6 @@ const userSchema = new Schema<IUser>(
 );
 
 // Create the User model
-const UserModel = model<IUser>("User", userSchema);
+const User = model<IUser>("User", userSchema);
 
-export default UserModel;
+export default User;

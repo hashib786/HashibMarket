@@ -1,12 +1,12 @@
-import express, { Request, Response } from "express";
+import express from "express";
+
+import userRouter from "./routes/userRoutes";
 
 const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).json({
-    status: "success",
-    message: "Hello world!",
-  });
-});
+// Middlewares
+app.use(express.json({ limit: "10kb" }));
+
+app.use("/api/v1/users", userRouter);
 
 export default app;
