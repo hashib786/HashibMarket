@@ -1,0 +1,19 @@
+{
+  "name": "hashibmarket",
+  "version": "1.0.0",
+  "description": "1. **User Model:**\r 2. **Product Model:**\r 3. **Order Model:**\r 4. **Review Model:**\r 5. **Seller Model:**\r 6. **Cart Model:**\r 7. **Wishlist Model:**\r 8. **Payment Model:**\r 9. **Admin Model:**",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node ./src/index.ts",
+    "dev": "nodemon ./src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.17",
+    "express": "^4.18.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
