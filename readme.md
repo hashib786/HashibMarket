@@ -114,12 +114,12 @@
 
 - **POST /signup:** User registration.
 - **POST /login:** User login.
-- **POST /logout:** User logout.
 - **POST /forgotpassword:** Initiate password reset.
 - **PUT /resetpassword/:token:** Reset user password using a reset token.
 
 **Logged-In User Accessible:**
 
+- **POST /logout:** User logout.
 - **PATCH /updatemypassword:** Update user's own password.
 - **PATCH /updateme:** Update user profile information.
 - **DELETE /deleteme:** Delete user's own account.
