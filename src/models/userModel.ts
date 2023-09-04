@@ -1,4 +1,5 @@
 // Import necessary libraries if required
+import bcrypt from "bcryptjs";
 import { Document, Schema, Types, model } from "mongoose";
 
 // Define the User interface
@@ -6,7 +7,7 @@ interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  passwordConfirm: string;
+  passwordConfirm: string | undefined;
   role: string;
   address: string;
   profileImage: string;
@@ -87,6 +88,17 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
   }
 );
+
+//  ******** Pre Middlewares ***********
+// Hashing Password
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) next();
+
+  this.password = await bcrypt.hash(this.password, 14);
+  this.passwordConfirm = undefined;
+
+  next();
+});
 
 // Create the User model
 const User = model<IUser>("User", userSchema);
