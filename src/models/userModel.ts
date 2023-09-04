@@ -1,6 +1,7 @@
 // Import necessary libraries if required
-import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { Document, Schema, Types, model } from "mongoose";
+import bcrypt from "bcryptjs";
 
 // Define the User interface
 export interface IUser extends Document {
@@ -11,13 +12,16 @@ export interface IUser extends Document {
   role: string;
   address: string;
   profileImage: string;
-  cart: Types.ObjectId; // You can replace this with the actual reference type
-  wishlist: Types.ObjectId; // You can replace this with the actual reference type
-  orders: Types.ObjectId[]; // You can replace this with the actual reference type
-  reviews: Types.ObjectId[]; // You can replace this with the actual reference type
+  cart: Types.ObjectId;
+  wishlist: Types.ObjectId;
+  orders: Types.ObjectId[];
+  reviews: Types.ObjectId[];
+  passwordResetToken: string | undefined;
+  passwordResetExpires: Date | undefined;
   createdAt: Date;
   updatedAt: Date;
   isCorrectPassword(userPass: string, hashPass: string): Promise<Boolean>;
+  createPasswordResetToken(): string;
 }
 
 const userSchema = new Schema<IUser>(
@@ -84,6 +88,8 @@ const userSchema = new Schema<IUser>(
         ref: "Review",
       },
     ],
+    passwordResetToken: String,
+    passwordResetExpires: Date,
   },
   {
     timestamps: true,
@@ -107,6 +113,19 @@ userSchema.methods.isCorrectPassword = async function (
   hashPass: string
 ): Promise<Boolean> {
   return await bcrypt.compare(userPass, hashPass);
+};
+
+userSchema.methods.createPasswordResetToken = function (): string {
+  const resetToken = crypto.randomBytes(14).toString("hex");
+  // const resetTokenHex = crypto.randomBytes(14).toString();
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
 };
 
 // Create the User model

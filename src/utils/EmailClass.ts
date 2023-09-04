@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import { IUser } from "../models/userModel";
 import { htmlToText } from "html-to-text";
-import { welcomeHTMLEmail } from "./EmailTemplates";
+import { resetPasswordHTML, welcomeHTMLEmail } from "./EmailTemplates";
 
 export default class Email {
   public to: string;
@@ -57,5 +57,10 @@ export default class Email {
   async sendWelcomeMail() {
     const html = welcomeHTMLEmail("localhost:8000", this.name);
     await this.sendMail("Welcome To Hashib Market", html);
+  }
+
+  async sendResetPassMail(resetUrl: string) {
+    const html = resetPasswordHTML(resetUrl);
+    await this.sendMail("Forgot Password in Hashib Market", html);
   }
 }

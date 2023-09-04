@@ -63,3 +63,37 @@ export const login = catchAsync(
     sendJWTToken(user, res, 200);
   }
 );
+
+export const forgotPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+    if (!email) return next(new AppError("Please Provide Email", 401));
+
+    const user = await User.findOne({ email });
+    if (!user) return next(new AppError("User is Not Found", 404));
+
+    const resetToken = user.createPasswordResetToken();
+
+    await user.save({ validateBeforeSave: false });
+
+    try {
+      const resetUrl = `${req.protocol}://${req.get(
+        "host"
+      )}/api/v1/users/resetpassword/${resetToken}`;
+
+      await new Email(user).sendResetPassMail(resetUrl);
+
+      res.status(200).json({
+        status: "success",
+        message: "Token send on your Mail",
+      });
+    } catch (error) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+
+      await user.save();
+
+      return next(new AppError("When Sending Email getting Error", 500));
+    }
+  }
+);
