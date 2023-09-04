@@ -18,6 +18,7 @@ export interface IUser extends Document {
   reviews: Types.ObjectId[];
   passwordResetToken: string | undefined;
   passwordResetExpires: Date | undefined;
+  passwordChangeAt: Date | undefined;
   createdAt: Date;
   updatedAt: Date;
   isCorrectPassword(userPass: string, hashPass: string): Promise<Boolean>;
@@ -90,6 +91,7 @@ const userSchema = new Schema<IUser>(
     ],
     passwordResetToken: String,
     passwordResetExpires: Date,
+    passwordChangeAt: Date,
   },
   {
     timestamps: true,
@@ -99,9 +101,19 @@ const userSchema = new Schema<IUser>(
 //  ******** Pre Middlewares ***********
 // Hashing Password
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) next();
+  if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 14);
+  this.passwordConfirm = undefined;
+
+  next();
+});
+
+// if password update update passwordChangeAt
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password") || this.isNew) return next();
+
+  this.passwordChangeAt = new Date(Date.now() - 1000);
   this.passwordConfirm = undefined;
 
   next();
