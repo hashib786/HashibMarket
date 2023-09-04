@@ -17,6 +17,7 @@ export interface IUser extends Document {
   reviews: Types.ObjectId[]; // You can replace this with the actual reference type
   createdAt: Date;
   updatedAt: Date;
+  isCorrectPassword(userPass: string, hashPass: string): Promise<Boolean>;
 }
 
 const userSchema = new Schema<IUser>(
@@ -99,6 +100,14 @@ userSchema.pre("save", async function (next) {
 
   next();
 });
+
+// ********* Methods ************
+userSchema.methods.isCorrectPassword = async function (
+  userPass: string,
+  hashPass: string
+): Promise<Boolean> {
+  return await bcrypt.compare(userPass, hashPass);
+};
 
 // Create the User model
 const User = model<IUser>("User", userSchema);

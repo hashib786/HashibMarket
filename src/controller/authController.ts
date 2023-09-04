@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/userModel";
 import { catchAsync } from "../utils/catchAsync";
 import Email from "../utils/EmailClass";
+import { AppError } from "../utils/AppError";
 
 const createJWTToken = (id: Types.ObjectId) => {
   return jwt.sign({ id }, process.env.JWT_SECRET!, {
@@ -46,5 +47,19 @@ export const signUp = catchAsync(
 
     await new Email(newUser).sendWelcomeMail();
     sendJWTToken(newUser, res, 201);
+  }
+);
+
+export const login = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+    if (!email || !password)
+      return next(new AppError("Please Provide email and password.", 403));
+
+    const user = await User.findOne({ email });
+    if (!user || !(await user.isCorrectPassword(password, user.password)))
+      return next(new AppError("Please Provide write Email or Password", 403));
+
+    sendJWTToken(user, res, 200);
   }
 );
