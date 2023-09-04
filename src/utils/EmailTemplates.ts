@@ -63,3 +63,65 @@ export const welcomeHTMLEmail = (
  
  `;
 };
+
+export const resetPasswordHTML = (resetUrl: string) => {
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reset Your Password</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+            }
+    
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+    
+            h1 {
+                color: #333;
+            }
+    
+            p {
+                font-size: 16px;
+                line-height: 1.6;
+                color: #555;
+            }
+    
+            a {
+                color: #007BFF;
+                text-decoration: none;
+            }
+    
+            a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div class="container">
+            <h1>Reset Your Password</h1>
+            <p>Hi there,</p>
+            <p>We received a request to reset your password. To reset your password, click the link below:</p>
+            <p><a href="${resetUrl}">Reset My Password</a> (This link is valid for 10 minutes)</p>
+            <p>If you didn't request a password reset, you can ignore this email.</p>
+            <p>Thank you,</p>
+            <p>Your Company Name</p>
+        </div>
+    </body>
+    
+    </html>
+    
+    `;
+};
