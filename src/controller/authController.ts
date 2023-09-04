@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 import User, { IUser } from "../models/userModel";
 import { catchAsync } from "../utils/catchAsync";
@@ -95,5 +96,29 @@ export const forgotPassword = catchAsync(
 
       return next(new AppError("When Sending Email getting Error", 500));
     }
+  }
+);
+
+export const resetPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req.params;
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gte: Date.now() },
+    });
+
+    if (!user) return next(new AppError("Token is Expired or Invalid", 400));
+
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+
+    await user.save();
+
+    sendJWTToken(user, res, 200);
   }
 );
