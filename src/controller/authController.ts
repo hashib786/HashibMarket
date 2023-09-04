@@ -1,6 +1,36 @@
 import { NextFunction, Request, Response } from "express";
-import User from "../models/userModel";
+import { Types } from "mongoose";
+import jwt from "jsonwebtoken";
+
+import User, { IUser } from "../models/userModel";
 import { catchAsync } from "../utils/catchAsync";
+
+const createJWTToken = (id: Types.ObjectId) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET!, {
+    // algorithm : "ES256",
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
+
+const sendJWTToken = (user: IUser, res: Response, status: number = 201) => {
+  const token = createJWTToken(user._id);
+
+  res.cookie("jwt", token, {
+    expires: new Date(
+      Date.now() + parseInt(process.env.JWT_EXPIRES_IN!) * (24 * 60 * 60 * 1000)
+    ),
+    httpOnly: true,
+    secure: true,
+  });
+
+  user.password = "";
+
+  res.status(status).json({
+    status: "success",
+    token,
+    data: { user },
+  });
+};
 
 export const signUp = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -13,11 +43,6 @@ export const signUp = catchAsync(
       profileImage: req.body.profileImage,
     });
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        user: newUser,
-      },
-    });
+    sendJWTToken(newUser, res, 201);
   }
 );
