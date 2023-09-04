@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { IUser } from "../models/userModel";
 import { htmlToText } from "html-to-text";
+import { welcomeHTMLEmail } from "./EmailTemplates";
 
 export default class Email {
   public to: string;
@@ -29,8 +30,7 @@ export default class Email {
 
     const transporter = nodemailer.createTransport({
       service: process.env.MAIL_SERVICE,
-      port: 465,
-      secure: true,
+      port: parseInt(process.env.MAIL_PORT!) || 587,
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,

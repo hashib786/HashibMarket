@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 
 import User, { IUser } from "../models/userModel";
 import { catchAsync } from "../utils/catchAsync";
+import Email from "../utils/EmailClass";
 
 const createJWTToken = (id: Types.ObjectId) => {
   return jwt.sign({ id }, process.env.JWT_SECRET!, {
@@ -43,6 +44,7 @@ export const signUp = catchAsync(
       profileImage: req.body.profileImage,
     });
 
+    await new Email(newUser).sendWelcomeMail();
     sendJWTToken(newUser, res, 201);
   }
 );

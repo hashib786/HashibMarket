@@ -1,4 +1,8 @@
-const welcomeHTMLEmail = (domain: string, userName: string, com?: string) => {
+export const welcomeHTMLEmail = (
+  domain: string,
+  userName: string,
+  com?: string
+) => {
   return `
  <!DOCTYPE html>
  <html lang="en">
