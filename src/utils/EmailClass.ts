@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
 import { IUser } from "../models/userModel";
+import { htmlToText } from "html-to-text";
 
-class Email {
+export default class Email {
   public to: string;
   public from: string;
   public name: string;
@@ -49,7 +50,7 @@ class Email {
       to: this.to,
       subject: subject,
       html: html,
-      text: "Hello world?",
+      text: htmlToText(html),
     });
   }
 
