@@ -1,9 +1,9 @@
 import express from "express";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 import userRouter from "./routes/userRoutes";
 import { errorController } from "./controller/errorController";
-import morgan from "morgan";
-import cookieParser from "cookie-parser";
 
 const app = express();
 

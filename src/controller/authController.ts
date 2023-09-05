@@ -1,6 +1,8 @@
+import _ from "../custom/RequestUser";
+
 import { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import crypto from "crypto";
 
 import User, { IUser } from "../models/userModel";
@@ -125,6 +127,7 @@ export const resetPassword = catchAsync(
 
 export const logout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.user);
     res.cookie("jwt", "", {
       expires: new Date(Date.now() + 10 * 1000),
       httpOnly: true,
@@ -139,7 +142,30 @@ export const logout = catchAsync(
 
 export const protect = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.cookies);
+    let token;
+
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer ")
+    )
+      token = req.headers.authorization.split(" ")[1];
+    else if (req.cookies.jwt) token = req.cookies.jwt;
+
+    if (!token)
+      return next(
+        new AppError("You are not logged in Please login to get access", 401)
+      );
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser)
+      return next(
+        new AppError("Sending token user is not in out HashibMarket", 401)
+      );
+
+    req.user = currentUser;
+
     next();
   }
 );
