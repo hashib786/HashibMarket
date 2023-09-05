@@ -3,6 +3,7 @@ import {
   forgotPassword,
   login,
   logout,
+  protect,
   resetPassword,
   signUp,
 } from "../controller/authController";
@@ -16,6 +17,6 @@ router.route("/forgotpassword").patch(forgotPassword);
 router.route("/resetpassword/:token").post(resetPassword);
 
 // Logged-In User Accessible:
-router.route("/logout").get(logout);
+router.route("/logout").get(protect, logout);
 
 export default router;

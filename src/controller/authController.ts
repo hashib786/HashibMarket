@@ -130,5 +130,16 @@ export const logout = catchAsync(
       httpOnly: true,
       secure: true,
     });
+
+    res.status(201).json({
+      status: "success",
+    });
+  }
+);
+
+export const protect = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.cookies);
+    next();
   }
 );
