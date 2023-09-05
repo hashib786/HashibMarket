@@ -23,6 +23,7 @@ export interface IUser extends Document {
   updatedAt: Date;
   isCorrectPassword(userPass: string, hashPass: string): Promise<Boolean>;
   createPasswordResetToken(): string;
+  isPasswordChanged(jwtTime: number): boolean;
 }
 
 const userSchema = new Schema<IUser>(
@@ -139,6 +140,16 @@ userSchema.methods.createPasswordResetToken = function (): string {
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
+};
+
+userSchema.methods.isPasswordChanged = function (jwtTime: number): boolean {
+  if (this.passwordChangeAt) {
+    // Deviding thousent because jwt iat time is already devided 1000
+    const changePasswordTime =
+      parseInt(this.passwordChangeAt.getTime(), 10) / 1000;
+    return jwtTime < changePasswordTime;
+  }
+  return false;
 };
 
 // Create the User model

@@ -127,7 +127,6 @@ export const resetPassword = catchAsync(
 
 export const logout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.user);
     res.cookie("jwt", "", {
       expires: new Date(Date.now() + 10 * 1000),
       httpOnly: true,
@@ -159,9 +158,15 @@ export const protect = catchAsync(
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
     const currentUser = await User.findById(decoded.id);
-    if (!currentUser)
+    if (!currentUser || !decoded.iat)
       return next(
         new AppError("Sending token user is not in out HashibMarket", 401)
+      );
+
+    const isPasswordChanged = currentUser.isPasswordChanged(decoded.iat);
+    if (isPasswordChanged)
+      return next(
+        new AppError("User Recently changed Password | Please log in", 401)
       );
 
     req.user = currentUser;
