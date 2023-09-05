@@ -122,3 +122,13 @@ export const resetPassword = catchAsync(
     sendJWTToken(user, res, 200);
   }
 );
+
+export const logout = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.cookie("jwt", "", {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true,
+      secure: true,
+    });
+  }
+);

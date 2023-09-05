@@ -119,7 +119,7 @@
 
 **Logged-In User Accessible:**
 
-- **POST /logout:** User logout.
+- **GET /logout:** User logout.
 - **PATCH /updatemypassword:** Update user's own password.
 - **PATCH /updateme:** Update user profile information.
 - **DELETE /deleteme:** Delete user's own account.
