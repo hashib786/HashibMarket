@@ -8,7 +8,6 @@ import {
   signUp,
 } from "../controller/authController";
 import multer from "multer";
-import { uploadImage } from "../controller/userController";
 
 const router = Router();
 
@@ -23,6 +22,5 @@ router.route("/resetpassword/:token").post(resetPassword);
 
 // Logged-In User Accessible:
 router.route("/logout").get(protect, logout);
-router.route("/upload").post(upload, uploadImage);
 
 export default router;
