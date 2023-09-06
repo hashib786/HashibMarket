@@ -59,7 +59,7 @@ export const login = catchAsync(
     if (!email || !password)
       return next(new AppError("Please Provide email and password.", 403));
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
     if (!user || !(await user.isCorrectPassword(password, user.password)))
       return next(new AppError("Please Provide write Email or Password", 403));
 
