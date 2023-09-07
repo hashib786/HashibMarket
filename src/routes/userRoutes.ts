@@ -5,11 +5,11 @@ import {
   logout,
   protect,
   resetPassword,
+  restrictTo,
   signUp,
   updatePassword,
 } from "../controller/authController";
 import multer from "multer";
-import { uploadImage, uploadManyImage } from "../controller/userControllerForImage";
 import {
   createUser,
   deleteMe,
@@ -25,7 +25,6 @@ const router = Router();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage }).single("profileImage");
-const uploadMany = multer({ storage }).array("file", 3);
 
 // Accessible to All Users:
 router.route("/signup").post(signUp);
@@ -42,10 +41,11 @@ router.route("/deleteme").delete(deleteMe);
 router.route("/me").get(getMe);
 
 // Admin Accessible:
+router.use(restrictTo("admin"));
 router.route("/").get(getAllUser).post(createUser);
 router.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
 
-router.route("/upload").post(upload, uploadImage);
-router.route("/uploadMany").post(uploadMany, uploadManyImage);
+// router.route("/upload").post(upload, uploadImage);
+// router.route("/uploadMany").post(uploadMany, uploadManyImage);
 
 export default router;
