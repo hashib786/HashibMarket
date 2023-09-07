@@ -95,3 +95,15 @@ export const updateUser = catchAsync(
     });
   }
 );
+
+export const deleteUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+
+    res.status(200).json({
+      status: "success",
+      data: null,
+    });
+  }
+);

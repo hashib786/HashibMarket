@@ -9,13 +9,11 @@ import {
   updatePassword,
 } from "../controller/authController";
 import multer from "multer";
-import {
-  uploadImage,
-  uploadManyImage,
-} from "../controller/userControllerForImage";
+import { uploadImage, uploadManyImage } from "../controller/userControllerForImage";
 import {
   createUser,
   deleteMe,
+  deleteUser,
   getAllUser,
   getMe,
   getUser,
@@ -45,7 +43,7 @@ router.route("/me").get(getMe);
 
 // Admin Accessible:
 router.route("/").get(getAllUser).post(createUser);
-router.route("/:id").get(getUser).patch(updateUser);
+router.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
 
 router.route("/upload").post(upload, uploadImage);
 router.route("/uploadMany").post(uploadMany, uploadManyImage);
