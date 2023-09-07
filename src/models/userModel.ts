@@ -60,7 +60,7 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: [true, "Role is required."],
       enum: {
-        values: ["user"],
+        values: ["user", "seller", "admin"],
         message: "enum validator failed for path `{PATH}` with value `{VALUE}`",
       }, // Example of enum validation
       default: "user",
@@ -104,7 +104,7 @@ const userSchema = new Schema<IUser>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 //  ******** Pre Middlewares ***********
@@ -128,18 +128,15 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.pre(
-  /^find/,
-  function (this: mongoose.Query<any, any, {}, any, "find">, next) {
-    this.find({ isActive: { $ne: false } });
-    next();
-  }
-);
+userSchema.pre(/^find/, function (this: mongoose.Query<any, any, {}, any, "find">, next) {
+  this.find({ isActive: { $ne: false } });
+  next();
+});
 
 // ********* Methods ************
 userSchema.methods.isCorrectPassword = async function (
   userPass: string,
-  hashPass: string
+  hashPass: string,
 ): Promise<Boolean> {
   return await bcrypt.compare(userPass, hashPass);
 };
@@ -148,10 +145,7 @@ userSchema.methods.createPasswordResetToken = function (): string {
   const resetToken = crypto.randomBytes(14).toString("hex");
   // const resetTokenHex = crypto.randomBytes(14).toString();
 
-  this.passwordResetToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
+  this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
@@ -160,8 +154,7 @@ userSchema.methods.createPasswordResetToken = function (): string {
 userSchema.methods.isPasswordChanged = function (jwtTime: number): boolean {
   if (this.passwordChangeAt) {
     // Deviding thousent because jwt iat time is already devided 1000
-    const changePasswordTime =
-      parseInt(this.passwordChangeAt.getTime(), 10) / 1000;
+    const changePasswordTime = parseInt(this.passwordChangeAt.getTime(), 10) / 1000;
     return jwtTime < changePasswordTime;
   }
   return false;
