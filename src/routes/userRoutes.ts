@@ -20,6 +20,7 @@ import {
   getMe,
   getUser,
   updateMe,
+  updateUser,
 } from "../controller/userController";
 
 const router = Router();
@@ -44,7 +45,7 @@ router.route("/me").get(getMe);
 
 // Admin Accessible:
 router.route("/").get(getAllUser).post(createUser);
-router.route("/:id").get(getUser);
+router.route("/:id").get(getUser).patch(updateUser);
 
 router.route("/upload").post(upload, uploadImage);
 router.route("/uploadMany").post(uploadMany, uploadManyImage);

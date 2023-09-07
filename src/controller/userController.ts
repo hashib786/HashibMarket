@@ -80,3 +80,18 @@ export const getUser = catchAsync(
     });
   }
 );
+
+export const updateUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const user = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: { user },
+    });
+  }
+);
