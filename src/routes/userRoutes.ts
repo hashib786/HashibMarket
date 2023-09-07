@@ -14,6 +14,7 @@ import {
   uploadManyImage,
 } from "../controller/userControllerForImage";
 import {
+  createUser,
   deleteMe,
   getMe,
   getUser,
@@ -41,7 +42,7 @@ router.route("/deleteme").delete(deleteMe);
 router.route("/me").get(getMe);
 
 // Admin Accessible:
-router.route("/").get(getUser);
+router.route("/").get(getUser).post(createUser);
 
 router.route("/upload").post(upload, uploadImage);
 router.route("/uploadMany").post(uploadMany, uploadManyImage);

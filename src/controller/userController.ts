@@ -58,3 +58,13 @@ export const getUser = catchAsync(
     });
   }
 );
+
+export const createUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.create(req.body);
+    res.status(200).json({
+      status: "success",
+      data: { user },
+    });
+  }
+);
