@@ -52,3 +52,26 @@ export const uploadImage = catchAsync(
     res.status(200).send(`Successfully uploaded, url: ${result?.secure_url}`);
   }
 );
+
+export const uploadManyImage = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Check if a file was uploaded successfully
+    if (!req.files || req.files.length === 0) {
+      return next(new AppError("No files uploaded.", 400));
+    }
+
+    const files: Express.Multer.File[] = req.files as Express.Multer.File[];
+
+    const uploadPromises = files.map(async (file: { buffer: Buffer }) => {
+      const result = await bufferUpload(file.buffer);
+      return result?.secure_url;
+    });
+
+    try {
+      const uploadedUrls = await Promise.all(uploadPromises);
+      res.status(200).json({ uploadedUrls });
+    } catch (error) {
+      next(new AppError("Error uploading files.", 500));
+    }
+  }
+);
