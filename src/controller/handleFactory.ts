@@ -19,3 +19,12 @@ export const getAll = <T>(Model: BaseModel<T>) =>
       data: { data },
     });
   });
+
+export const createOne = <T>(Model: BaseModel<T>) =>
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const data = await Model.create(req.body);
+    res.status(200).json({
+      status: "success",
+      data: { data },
+    });
+  });
