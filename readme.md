@@ -5,12 +5,10 @@
 1. **User Model:**
 2. **Product Model:**
 3. **Order Model:**
-4. **Review Model:**
-5. **Seller Model:**
-6. **Cart Model:**
-7. **Wishlist Model:**
-8. **Payment Model:**
-9. **Admin Model:**
+4. **Seller Model:**
+5. **Cart Model:**
+6. **Wishlist Model:**
+7. **Payment Model:**
 
 ## Models Detail
 
@@ -58,14 +56,6 @@
 - Comment
 - Timestamps (Created At, Updated At)
 
-**5. Seller Model:**
-
-- Name
-- Description
-- Contact Information
-- Products Listed (array of product references)
-- Timestamps (Created At, Updated At)
-
 **6. Cart Model:**
 
 - User (reference to User model)
@@ -86,14 +76,6 @@
 - Payment Method
 - Transaction ID
 - Payment Status
-- Timestamps (Created At, Updated At)
-
-**9. Admin Model:**
-
-- Name
-- Email
-- Password (hashed)
-- Role (admin)
 - Timestamps (Created At, Updated At)
 
 ## Routes:
