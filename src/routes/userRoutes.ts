@@ -13,7 +13,7 @@ import {
   uploadImage,
   uploadManyImage,
 } from "../controller/userControllerForImage";
-import { updateMe } from "../controller/userController";
+import { deleteMe, updateMe } from "../controller/userController";
 
 const router = Router();
 
@@ -32,6 +32,7 @@ router.use(protect);
 router.route("/logout").get(logout);
 router.route("/updatemypassword").patch(updatePassword);
 router.route("/updateme").patch(upload, updateMe);
+router.route("/deleteme").get(deleteMe);
 
 router.route("/upload").post(upload, uploadImage);
 router.route("/uploadMany").post(uploadMany, uploadManyImage);

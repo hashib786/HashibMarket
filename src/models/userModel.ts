@@ -1,6 +1,6 @@
 // Import necessary libraries if required
 import crypto from "crypto";
-import { Document, Schema, Types, model } from "mongoose";
+import mongoose, { Document, Schema, Types, model } from "mongoose";
 import bcrypt from "bcryptjs";
 
 // Define the User interface
@@ -19,6 +19,7 @@ export interface IUser extends Document {
   passwordResetToken: string | undefined;
   passwordResetExpires: Date | undefined;
   passwordChangeAt: Date | undefined;
+  isActive: Boolean;
   createdAt: Date;
   updatedAt: Date;
   isCorrectPassword(userPass: string, hashPass: string): Promise<Boolean>;
@@ -73,6 +74,10 @@ const userSchema = new Schema<IUser>(
       default:
         "https://res.cloudinary.com/dpvwypdrj/image/upload/v1694081465/users/ajxlslhncfxwkoud7qud.jpg",
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
     cart: {
       type: Schema.Types.ObjectId,
       ref: "Cart",
@@ -122,6 +127,14 @@ userSchema.pre("save", async function (next) {
 
   next();
 });
+
+userSchema.pre(
+  /^find/,
+  function (this: mongoose.Query<any, any, {}, any, "find">, next) {
+    this.find({ isActive: { $ne: false } });
+    next();
+  }
+);
 
 // ********* Methods ************
 userSchema.methods.isCorrectPassword = async function (

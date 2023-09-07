@@ -33,3 +33,18 @@ export const updateMe = catchAsync(
     });
   }
 );
+
+export const deleteMe = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("*******", req.user);
+    const deletedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { isActive: false },
+      {
+        new: true,
+      }
+    );
+    console.log(deletedUser);
+    res.status(204).json({ status: "success", data: null });
+  }
+);
