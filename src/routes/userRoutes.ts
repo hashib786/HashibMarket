@@ -9,7 +9,11 @@ import {
   updatePassword,
 } from "../controller/authController";
 import multer from "multer";
-import { uploadImage, uploadManyImage } from "../controller/userController";
+import {
+  uploadImage,
+  uploadManyImage,
+} from "../controller/userControllerForImage";
+import { updateMe } from "../controller/userController";
 
 const router = Router();
 
@@ -27,6 +31,7 @@ router.route("/resetpassword/:token").post(resetPassword);
 router.use(protect);
 router.route("/logout").get(logout);
 router.route("/updatemypassword").patch(updatePassword);
+router.route("/updateme").patch(updateMe);
 
 router.route("/upload").post(upload, uploadImage);
 router.route("/uploadMany").post(uploadMany, uploadManyImage);

@@ -1,78 +1,31 @@
 import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import { AppError } from "../utils/AppError";
-import {
-  v2 as cloudinaryV2,
-  UploadApiOptions,
-  UploadApiResponse,
-} from "cloudinary"; // Import `UploadApiResponse`
-import { Readable } from "stream";
 import User from "../models/userModel";
 
-const bufferUpload = async (
-  buffer: Buffer
-): Promise<UploadApiResponse | undefined> => {
-  return new Promise((resolve, reject) => {
-    const uploadOption: UploadApiOptions = {
-      transformation: {
-        aspect_ratio: "1.0",
-        gravity: "face",
-        width: 150,
-        crop: "fill",
-      },
-      folder: "users",
-    };
+function filterObj(body: any, ...fields: string[]) {
+  return Object.keys(body).reduce((acc: any, curr: string) => {
+    fields.includes(curr) ? (acc[curr] = body[curr]) : "";
+    return acc;
+  }, {});
+}
 
-    const writeStream = cloudinaryV2.uploader.upload_stream(
-      uploadOption,
-      (err, result) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(result);
-      }
-    );
-
-    const readStream = new Readable({
-      read() {
-        this.push(buffer);
-        this.push(null);
-      },
-    });
-    readStream.pipe(writeStream);
-  });
-};
-
-export const uploadImage = catchAsync(
+export const updateMe = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    // Check if a file was uploaded successfully
-    if (!req.file) return next(new AppError("No file uploaded.", 400));
-    const result = await bufferUpload(req.file.buffer);
-    console.log(result);
-    res.status(200).send(`Successfully uploaded, url: ${result?.secure_url}`);
-  }
-);
+    if (req.body.password || req.body.passwordConfirm)
+      return next(new AppError("This route is not for update password ", 401));
 
-export const uploadManyImage = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    // Check if a file was uploaded successfully
-    if (!req.files || req.files.length === 0) {
-      return next(new AppError("No files uploaded.", 400));
-    }
+    const filterBody = filterObj(req.body, "name", "email", "address");
+    console.log(filterBody);
 
-    const files: Express.Multer.File[] = req.files as Express.Multer.File[];
-
-    const uploadPromises = files.map(async (file: { buffer: Buffer }) => {
-      const result = await bufferUpload(file.buffer);
-      return result?.secure_url;
+    const updatedUser = await User.findByIdAndUpdate(req.user._id, filterBody, {
+      new: true,
+      runValidators: true,
     });
 
-    try {
-      const uploadedUrls = await Promise.all(uploadPromises);
-      res.status(200).json({ uploadedUrls });
-    } catch (error) {
-      next(new AppError("Error uploading files.", 500));
-    }
+    res.status(200).json({
+      status: "success",
+      data: { updatedUser },
+    });
   }
 );
