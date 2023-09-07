@@ -36,15 +36,14 @@ export const updateMe = catchAsync(
 
 export const deleteMe = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("*******", req.user);
-    const deletedUser = await User.findByIdAndUpdate(
-      req.user._id,
-      { isActive: false },
-      {
-        new: true,
-      }
-    );
-    console.log(deletedUser);
+    await User.findByIdAndUpdate(req.user._id, { isActive: false });
     res.status(204).json({ status: "success", data: null });
+  }
+);
+
+export const getMe = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const currentUser = await User.findById(req.user._id);
+    res.status(200).json({ status: "success", data: { user: currentUser } });
   }
 );
