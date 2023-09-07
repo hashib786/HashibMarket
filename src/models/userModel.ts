@@ -70,6 +70,8 @@ const userSchema = new Schema<IUser>(
     },
     profileImage: {
       type: String,
+      default:
+        "https://res.cloudinary.com/dpvwypdrj/image/upload/v1694081465/users/ajxlslhncfxwkoud7qud.jpg",
     },
     cart: {
       type: Schema.Types.ObjectId,
