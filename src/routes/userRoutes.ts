@@ -16,6 +16,7 @@ import {
 import {
   createUser,
   deleteMe,
+  getAllUser,
   getMe,
   getUser,
   updateMe,
@@ -42,7 +43,8 @@ router.route("/deleteme").delete(deleteMe);
 router.route("/me").get(getMe);
 
 // Admin Accessible:
-router.route("/").get(getUser).post(createUser);
+router.route("/").get(getAllUser).post(createUser);
+router.route("/:id").get(getUser);
 
 router.route("/upload").post(upload, uploadImage);
 router.route("/uploadMany").post(uploadMany, uploadManyImage);

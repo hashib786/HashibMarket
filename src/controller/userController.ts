@@ -48,7 +48,7 @@ export const getMe = catchAsync(
   }
 );
 
-export const getUser = catchAsync(
+export const getAllUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const users = await User.find();
     res.status(200).json({
@@ -62,6 +62,18 @@ export const getUser = catchAsync(
 export const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.create(req.body);
+    res.status(200).json({
+      status: "success",
+      data: { user },
+    });
+  }
+);
+
+export const getUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
     res.status(200).json({
       status: "success",
       data: { user },
