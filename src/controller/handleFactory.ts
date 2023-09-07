@@ -28,3 +28,14 @@ export const createOne = <T>(Model: BaseModel<T>) =>
       data: { data },
     });
   });
+
+export const getOne = <T>(Model: BaseModel<T>) =>
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const data = await Model.findById(id);
+
+    res.status(200).json({
+      status: "success",
+      data: { data },
+    });
+  });
