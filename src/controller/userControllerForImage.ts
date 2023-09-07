@@ -9,7 +9,7 @@ import {
 import { Readable } from "stream";
 import User from "../models/userModel";
 
-const bufferUpload = async (
+export const bufferUpload = async (
   buffer: Buffer
 ): Promise<UploadApiResponse | undefined> => {
   return new Promise((resolve, reject) => {

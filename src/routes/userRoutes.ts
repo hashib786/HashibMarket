@@ -18,7 +18,7 @@ import { updateMe } from "../controller/userController";
 const router = Router();
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage }).single("file");
+const upload = multer({ storage }).single("profileImage");
 const uploadMany = multer({ storage }).array("file", 3);
 
 // Accessible to All Users:
@@ -31,7 +31,7 @@ router.route("/resetpassword/:token").post(resetPassword);
 router.use(protect);
 router.route("/logout").get(logout);
 router.route("/updatemypassword").patch(updatePassword);
-router.route("/updateme").patch(updateMe);
+router.route("/updateme").patch(upload, updateMe);
 
 router.route("/upload").post(upload, uploadImage);
 router.route("/uploadMany").post(uploadMany, uploadManyImage);
