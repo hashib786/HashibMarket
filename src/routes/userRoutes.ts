@@ -13,7 +13,12 @@ import {
   uploadImage,
   uploadManyImage,
 } from "../controller/userControllerForImage";
-import { deleteMe, getMe, updateMe } from "../controller/userController";
+import {
+  deleteMe,
+  getMe,
+  getUser,
+  updateMe,
+} from "../controller/userController";
 
 const router = Router();
 
@@ -34,6 +39,9 @@ router.route("/updatemypassword").patch(updatePassword);
 router.route("/updateme").patch(upload, updateMe);
 router.route("/deleteme").delete(deleteMe);
 router.route("/me").get(getMe);
+
+// Admin Accessible:
+router.route("/").get(getUser);
 
 router.route("/upload").post(upload, uploadImage);
 router.route("/uploadMany").post(uploadMany, uploadManyImage);

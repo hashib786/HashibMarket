@@ -47,3 +47,14 @@ export const getMe = catchAsync(
     res.status(200).json({ status: "success", data: { user: currentUser } });
   }
 );
+
+export const getUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const users = await User.find();
+    res.status(200).json({
+      status: "success",
+      result: users.length,
+      data: { users },
+    });
+  }
+);
