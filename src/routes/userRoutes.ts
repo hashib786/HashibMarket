@@ -6,6 +6,7 @@ import {
   protect,
   resetPassword,
   signUp,
+  updatePassword,
 } from "../controller/authController";
 import multer from "multer";
 import { uploadImage, uploadManyImage } from "../controller/userController";
@@ -23,8 +24,11 @@ router.route("/forgotpassword").patch(forgotPassword);
 router.route("/resetpassword/:token").post(resetPassword);
 
 // Logged-In User Accessible:
-router.route("/logout").get(protect, logout);
-router.route("/upload").post(protect, upload, uploadImage);
-router.route("/uploadMany").post(protect, uploadMany, uploadManyImage);
+router.use(protect);
+router.route("/logout").get(logout);
+router.route("/updatemypassword").patch(updatePassword);
+
+router.route("/upload").post(upload, uploadImage);
+router.route("/uploadMany").post(uploadMany, uploadManyImage);
 
 export default router;

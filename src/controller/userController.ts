@@ -7,6 +7,7 @@ import {
   UploadApiResponse,
 } from "cloudinary"; // Import `UploadApiResponse`
 import { Readable } from "stream";
+import User from "../models/userModel";
 
 const bufferUpload = async (
   buffer: Buffer

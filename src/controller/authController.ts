@@ -174,3 +174,30 @@ export const protect = catchAsync(
     next();
   }
 );
+
+export const updatePassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { currentPassword, password, passwordConfirm } = req.body;
+    if (!currentPassword || !password || !passwordConfirm)
+      return next(
+        new AppError(
+          "Please provide currentPassword, password, passwordConfirm",
+          403
+        )
+      );
+
+    const user = await User.findById(req.user._id).select("+password");
+    if (
+      !user ||
+      !(await user.isCorrectPassword(currentPassword, user.password))
+    )
+      return next(new AppError("Please Provide write current password", 403));
+
+    user.password = currentPassword;
+    user.passwordConfirm = passwordConfirm;
+
+    await user.save({ validateBeforeSave: true });
+
+    sendJWTToken(user, res, 200);
+  }
+);
