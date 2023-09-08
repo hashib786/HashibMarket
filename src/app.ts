@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
 import userRouter from "./routes/userRoutes";
+import productRouter from "./routes/productRoutes";
 import { errorController } from "./controller/errorController";
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/products", productRouter);
 
 // Handle Globel Error Handling
 app.use(errorController);
