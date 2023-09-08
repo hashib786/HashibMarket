@@ -4,6 +4,7 @@ import {
   getAllProducts,
   getProduct,
   setSellerId,
+  updateProduct,
 } from "../controller/productController";
 import { protect, restrictTo } from "../controller/authController";
 
@@ -18,5 +19,6 @@ router.use(protect);
 // Seller Accessible:
 router.use(restrictTo("seller"));
 router.route("/").post(setSellerId, createProduct);
+router.route("/:id").patch(updateProduct);
 
 export default router;
