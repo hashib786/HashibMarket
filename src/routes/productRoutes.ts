@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { createProduct, setSellerId } from "../controller/productController";
+import { createProduct, getAllProducts, setSellerId } from "../controller/productController";
 import { protect, restrictTo } from "../controller/authController";
 
 const router = Router();
+
+// Accessible to All Users:
+router.route("/").get(getAllProducts);
 
 router.use(protect);
 

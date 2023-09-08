@@ -64,6 +64,13 @@ const productSchema = new Schema<IProduct>(
   { timestamps: true },
 );
 
+// ******* Pre Middleware *********
+productSchema.pre(/^find/, function (this: mongoose.Query<any, any, {}, any, "find">, next) {
+  this.populate({ path: "seller", select: "name email address profileImage" });
+
+  next();
+});
+
 // Create and export the Product model
 const Product = mongoose.model<IProduct>("Product", productSchema);
 export default Product;
