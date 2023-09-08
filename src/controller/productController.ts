@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Product from "../models/productModel";
-import { createOne, getAll } from "./handleFactory";
+import { createOne, getAll, getOne } from "./handleFactory";
 
 export const setSellerId = (req: Request, _: Response, next: NextFunction) => {
   req.body.seller = req.user._id;
@@ -9,3 +9,4 @@ export const setSellerId = (req: Request, _: Response, next: NextFunction) => {
 
 export const getAllProducts = getAll(Product);
 export const createProduct = createOne(Product);
+export const getProduct = getOne(Product);
