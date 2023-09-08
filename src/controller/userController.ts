@@ -3,7 +3,7 @@ import { catchAsync } from "../utils/catchAsync";
 import { AppError } from "../utils/AppError";
 import User from "../models/userModel";
 import { bufferUpload } from "./userControllerForImage";
-import { createOne, getAll, getOne } from "./handleFactory";
+import { createOne, getAll, getOne, updateOne } from "./handleFactory";
 
 function filterObj(body: any, ...fields: string[]) {
   return Object.keys(body).reduce((acc: any, curr: string) => {
@@ -43,19 +43,7 @@ export const getMe = catchAsync(async (req: Request, res: Response, next: NextFu
 export const getAllUser = getAll(User);
 export const createUser = createOne(User);
 export const getUser = getOne(User);
-
-export const updateUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params;
-  const user = await User.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
-  res.status(200).json({
-    status: "success",
-    data: { user },
-  });
-});
+export const updateUser = updateOne(User);
 
 export const deleteUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
