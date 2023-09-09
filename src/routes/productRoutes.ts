@@ -23,6 +23,7 @@ router.route("/:id").get(getProduct);
 // Logged-In User Accessible:
 router.use(protect);
 router.route("/name/:slug").get(getProductWithSlug);
+router.route("/categories/:categories").get(getAllProducts);
 
 // Seller Accessible:
 router.use(restrictTo("seller", "admin"));
