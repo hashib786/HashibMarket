@@ -9,7 +9,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   passwordConfirm: string | undefined;
-  role: string;
+  role: "user" | "seller" | "admin";
   address: string;
   profileImage: string;
   cart: Types.ObjectId;
