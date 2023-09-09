@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
+import slugify from "slugify";
 
 // Interface to define the structure of a product
 interface IProduct extends Document {
@@ -8,6 +9,7 @@ interface IProduct extends Document {
   discountPrice: number;
   images: string[];
   categories: string; // Assuming you're using MongoDB ObjectId for references
+  slug: string;
   stockQuantity: number;
   seller: Types.ObjectId; // Assuming you're using MongoDB ObjectId for references
   reviews: Types.ObjectId[]; // Assuming you're using MongoDB ObjectId for references
@@ -46,6 +48,7 @@ const productSchema = new Schema<IProduct>(
     categories: {
       type: String,
       required: [true, "A Product must have categories"],
+      lowercase: true,
     },
     stockQuantity: {
       type: Number,
@@ -60,11 +63,16 @@ const productSchema = new Schema<IProduct>(
       type: [Schema.Types.ObjectId],
       ref: "Review", // Reference to your Review model
     },
+    slug: String,
   },
-  { timestamps: true },
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
 
 // ******* Pre Middleware *********
+productSchema.pre("save", function (next) {
+  this.slug = slugify(this.name, { lower: true });
+});
+
 productSchema.pre(/^find/, function (this: mongoose.Query<any, any, {}, any, "find">, next) {
   this.populate({ path: "seller", select: "name email address profileImage" });
 
