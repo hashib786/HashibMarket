@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import User from "../models/userModel";
 import { AppError } from "../utils/AppError";
-import { getAll } from "./handleFactory";
+import { getAll, updateOne } from "./handleFactory";
 
 export const isSeller = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { sellerId } = req.params;
@@ -27,3 +27,4 @@ export const setSellerFilter = (req: Request, res: Response, next: NextFunction)
 };
 
 export const getAllSeller = getAll(User);
+export const updateSeller = updateOne(User);

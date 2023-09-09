@@ -53,8 +53,9 @@ export const getOne = <T>(Model: BaseModel<T>) =>
 
 export const updateOne = <T>(Model: BaseModel<T>) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    const data = await Model.findByIdAndUpdate(id, req.body, {
+    const { id, sellerId } = req.params;
+    console.log(id, req.body);
+    const data = await Model.findByIdAndUpdate(id || sellerId, req.body, {
       new: true,
       runValidators: true,
     });
