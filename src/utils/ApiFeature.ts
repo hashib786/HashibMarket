@@ -28,4 +28,14 @@ export default class ApiFeature<
 
     return this;
   }
+
+  fields() {
+    let { fields } = this.queryObj;
+    if (fields && typeof fields === "string") {
+      fields = fields.replaceAll(",", " ");
+      this.query.select(fields);
+    } else this.query.select("-__v");
+
+    return this;
+  }
 }
