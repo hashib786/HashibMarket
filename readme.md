@@ -124,8 +124,8 @@
 
 **Logged-In User Accessible:**
 
-- **GET /categories:** Get a list of available categories.
-- **GET /slug:** Search for products based on keywords and filters.
+- **GET /categories/:categories:** Get a list of available categories.
+- **GET /name/:slug:** Search for products based on keywords and filters.
 
 **Seller Accessible:**
 
