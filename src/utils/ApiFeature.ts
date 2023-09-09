@@ -18,4 +18,14 @@ export default class ApiFeature<
     this.query.find(JSON.parse(queryStr));
     return this;
   }
+
+  sort() {
+    let { sort } = this.queryObj;
+    if (sort && typeof sort === "string") {
+      sort = sort.replaceAll(",", " ");
+      this.query.sort(sort);
+    } else this.query.sort("-createdAt");
+
+    return this;
+  }
 }

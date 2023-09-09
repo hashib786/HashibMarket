@@ -13,7 +13,7 @@ type BaseModel<T> = Model<T, {}, {}, {}, Document<unknown, {}, T> & T & IBaseDoc
 
 export const getAll = <T>(Model: BaseModel<T>) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const feature = new ApiFeature(Model.find(), req.query).filter();
+    const feature = new ApiFeature(Model.find(), req.query).filter().sort();
 
     const data = await feature.query;
     res.status(200).json({
