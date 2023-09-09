@@ -38,4 +38,14 @@ export default class ApiFeature<
 
     return this;
   }
+
+  pagination() {
+    let { page, limit } = this.queryObj;
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 100;
+    const skip = (pageNum - 1) * limitNum;
+    this.query.skip(skip).limit(limitNum);
+
+    return this;
+  }
 }
