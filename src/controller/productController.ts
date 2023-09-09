@@ -28,6 +28,14 @@ export const getAllProducts = getAll(Product);
 export const createProduct = createOne(Product);
 export const getProduct = getOne(Product);
 
+export const getProductWithSlug = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { slug } = req.params;
+    const product = await Product.find({ slug });
+    res.status(200).json({ status: "success", data: { data: product } });
+  },
+);
+
 export const updateProduct = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const product = await Product.findById(id);

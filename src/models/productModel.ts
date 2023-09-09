@@ -71,6 +71,7 @@ const productSchema = new Schema<IProduct>(
 // ******* Pre Middleware *********
 productSchema.pre("save", function (next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 productSchema.pre(/^find/, function (this: mongoose.Query<any, any, {}, any, "find">, next) {

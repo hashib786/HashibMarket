@@ -3,6 +3,7 @@ import {
   createProduct,
   getAllProducts,
   getProduct,
+  getProductWithSlug,
   setSellerId,
   updateProduct,
   uploadProductIMage,
@@ -19,11 +20,13 @@ const router = Router();
 router.route("/").get(getAllProducts);
 router.route("/:id").get(getProduct);
 
+// Logged-In User Accessible:
 router.use(protect);
+router.route("/:slug").get(getProductWithSlug);
 
 // Seller Accessible:
 router.use(restrictTo("seller", "admin"));
-router.route("/").post(setSellerId, upload, uploadProductIMage, createProduct);
+router.route("/").post(upload, setSellerId, uploadProductIMage, createProduct);
 router.route("/:id").patch(upload, uploadProductIMage, updateProduct);
 
 export default router;
