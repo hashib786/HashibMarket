@@ -7,6 +7,10 @@ import {
   updateProduct,
 } from "../controller/productController";
 import { protect, restrictTo } from "../controller/authController";
+import multer from "multer";
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage }).array("images");
 
 const router = Router();
 
@@ -18,7 +22,7 @@ router.use(protect);
 
 // Seller Accessible:
 router.use(restrictTo("seller"));
-router.route("/").post(setSellerId, createProduct);
-router.route("/:id").patch(updateProduct);
+router.route("/").post(setSellerId, upload, createProduct);
+router.route("/:id").patch(upload, updateProduct);
 
 export default router;

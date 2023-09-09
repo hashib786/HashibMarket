@@ -1,16 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import { AppError } from "../utils/AppError";
-import {
-  v2 as cloudinaryV2,
-  UploadApiOptions,
-  UploadApiResponse,
-} from "cloudinary"; // Import `UploadApiResponse`
+import { v2 as cloudinaryV2, UploadApiOptions, UploadApiResponse } from "cloudinary"; // Import `UploadApiResponse`
 import { Readable } from "stream";
 import User from "../models/userModel";
 
 export const bufferUpload = async (
-  buffer: Buffer
+  buffer: Buffer,
+  folder: string = "users",
 ): Promise<UploadApiResponse | undefined> => {
   return new Promise((resolve, reject) => {
     const uploadOption: UploadApiOptions = {
@@ -23,15 +20,24 @@ export const bufferUpload = async (
       folder: "users",
     };
 
+    const uploadOptionMany: UploadApiOptions = {
+      transformation: {
+        aspect_ratio: "1.0",
+        width: 450,
+        crop: "fill",
+      },
+      folder: "product",
+    };
+
     const writeStream = cloudinaryV2.uploader.upload_stream(
-      uploadOption,
+      folder === "users" ? uploadOption : uploadOptionMany,
       (err, result) => {
         if (err) {
           reject(err);
           return;
         }
         resolve(result);
-      }
+      },
     );
 
     const readStream = new Readable({
@@ -44,15 +50,13 @@ export const bufferUpload = async (
   });
 };
 
-export const uploadImage = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    // Check if a file was uploaded successfully
-    if (!req.file) return next(new AppError("No file uploaded.", 400));
-    const result = await bufferUpload(req.file.buffer);
-    console.log(result);
-    res.status(200).send(`Successfully uploaded, url: ${result?.secure_url}`);
-  }
-);
+export const uploadImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  // Check if a file was uploaded successfully
+  if (!req.file) return next(new AppError("No file uploaded.", 400));
+  const result = await bufferUpload(req.file.buffer);
+  console.log(result);
+  res.status(200).send(`Successfully uploaded, url: ${result?.secure_url}`);
+});
 
 export const uploadManyImage = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -74,5 +78,5 @@ export const uploadManyImage = catchAsync(
     } catch (error) {
       next(new AppError("Error uploading files.", 500));
     }
-  }
+  },
 );
