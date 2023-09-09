@@ -1,6 +1,8 @@
 import { Router } from "express";
 import {
+  checkingSameSeller,
   createProduct,
+  deleteProduct,
   getAllProducts,
   getProduct,
   getProductWithSlug,
@@ -28,6 +30,9 @@ router.route("/categories/:categories").get(getAllProducts);
 // Seller Accessible:
 router.use(restrictTo("seller", "admin"));
 router.route("/").post(upload, setSellerId, uploadProductIMage, createProduct);
-router.route("/:id").patch(upload, uploadProductIMage, updateProduct);
+router
+  .route("/:id")
+  .patch(upload, uploadProductIMage, checkingSameSeller, updateProduct)
+  .delete(checkingSameSeller, deleteProduct);
 
 export default router;
