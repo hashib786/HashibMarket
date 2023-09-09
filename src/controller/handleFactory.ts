@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import { Model } from "mongoose";
 import { catchAsync } from "../utils/catchAsync";
 import { NextFunction, Request, Response } from "express";
+import ApiFeature from "../utils/ApiFeature";
 
 interface IBaseDocument extends Document {
   _id: Types.ObjectId;
@@ -12,7 +13,9 @@ type BaseModel<T> = Model<T, {}, {}, {}, Document<unknown, {}, T> & T & IBaseDoc
 
 export const getAll = <T>(Model: BaseModel<T>) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const data = await Model.find();
+    const feature = new ApiFeature(Model.find(), req.query).filter();
+
+    const data = await feature.query;
     res.status(200).json({
       status: "success",
       result: data.length,
