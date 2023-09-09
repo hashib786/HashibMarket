@@ -15,6 +15,7 @@ export const getAll = <T>(Model: BaseModel<T>) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     let filter = {};
     if (req.params.categories) filter = { categories: req.params.categories };
+    if (req.body.filter) filter = { ...filter, ...req.body.filter };
 
     const feature = new ApiFeature(Model.find(filter), req.query)
       .filter()

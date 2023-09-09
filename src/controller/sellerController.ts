@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import User from "../models/userModel";
 import { AppError } from "../utils/AppError";
+import { getAll } from "./handleFactory";
 
 export const getSeller = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { sellerId } = req.params;
@@ -14,3 +15,10 @@ export const getSeller = catchAsync(async (req: Request, res: Response, next: Ne
     data: { seller },
   });
 });
+
+export const setSellerFilter = (req: Request, res: Response, next: NextFunction) => {
+  req.body.filter = { role: "seller" };
+  next();
+};
+
+export const getAllSeller = getAll(User);

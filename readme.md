@@ -147,11 +147,6 @@
 
 **Seller Accessible:**
 
-- **GET /products:** Get a list of products listed by the seller.
-- **GET /products/:productId:** Get details about a specific product listed by the seller.
-- **POST /products:** Create a new product (for sellers).
-- **PUT /products/:productId:** Update an existing product by ID (for sellers).
-- **DELETE /products/:productId:** Delete a product by ID (for sellers).
 - **GET /orders:** Get orders associated with the seller's products.
 - **GET /orders/:orderId:** Get details about a specific order associated with the seller's products.
 
