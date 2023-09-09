@@ -22,7 +22,7 @@ router.route("/:id").get(getProduct);
 router.use(protect);
 
 // Seller Accessible:
-router.use(restrictTo("seller"));
+router.use(restrictTo("seller", "admin"));
 router.route("/").post(setSellerId, upload, uploadProductIMage, createProduct);
 router.route("/:id").patch(upload, uploadProductIMage, updateProduct);
 

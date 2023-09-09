@@ -33,10 +33,8 @@ export const updateProduct = catchAsync(async (req: Request, res: Response, next
   const product = await Product.findById(id);
   if (!product) return next(new AppError("Not finding product given id: ", 401));
 
-  if (product.seller.id !== req.user.id)
+  if (product.seller.id !== req.user.id && req.user.role !== "admin")
     return next(new AppError("You are not created this product: ", 401));
-
-  // For Uploading multiple Images
 
   const data = await Product.findByIdAndUpdate(id, req.body, {
     new: true,
