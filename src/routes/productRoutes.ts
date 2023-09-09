@@ -5,6 +5,7 @@ import {
   getProduct,
   setSellerId,
   updateProduct,
+  uploadProductIMage,
 } from "../controller/productController";
 import { protect, restrictTo } from "../controller/authController";
 import multer from "multer";
@@ -22,7 +23,7 @@ router.use(protect);
 
 // Seller Accessible:
 router.use(restrictTo("seller"));
-router.route("/").post(setSellerId, upload, createProduct);
-router.route("/:id").patch(upload, updateProduct);
+router.route("/").post(setSellerId, upload, uploadProductIMage, createProduct);
+router.route("/:id").patch(upload, uploadProductIMage, updateProduct);
 
 export default router;

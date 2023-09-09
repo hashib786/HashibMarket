@@ -5,6 +5,20 @@ import { catchAsync } from "../utils/catchAsync";
 import { AppError } from "../utils/AppError";
 import { bufferUpload } from "./userControllerForImage";
 
+export const uploadProductIMage = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const files: Express.Multer.File[] = req.files as Express.Multer.File[];
+    if (files) {
+      const urls = files.map(
+        async (file: { buffer: Buffer }) => (await bufferUpload(file.buffer, "folder"))?.secure_url,
+      );
+      req.body.images = await Promise.all(urls);
+    }
+
+    next();
+  },
+);
+
 export const setSellerId = (req: Request, _: Response, next: NextFunction) => {
   req.body.seller = req.user._id;
   next();
@@ -23,13 +37,6 @@ export const updateProduct = catchAsync(async (req: Request, res: Response, next
     return next(new AppError("You are not created this product: ", 401));
 
   // For Uploading multiple Images
-  const files: Express.Multer.File[] = req.files as Express.Multer.File[];
-  if (files) {
-    const urls = files.map(
-      async (file: { buffer: Buffer }) => (await bufferUpload(file.buffer, "folder"))?.secure_url,
-    );
-    req.body.images = await Promise.all(urls);
-  }
 
   const data = await Product.findByIdAndUpdate(id, req.body, {
     new: true,
