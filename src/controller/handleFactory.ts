@@ -67,8 +67,8 @@ export const updateOne = <T>(Model: BaseModel<T>) =>
 
 export const deleteOne = <T>(Model: BaseModel<T>) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    await Model.findByIdAndDelete(id);
+    const { id, sellerId } = req.params;
+    await Model.findByIdAndDelete(id || sellerId);
 
     res.status(200).json({
       status: "success",

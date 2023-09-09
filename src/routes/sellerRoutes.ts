@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  deleteSeller,
   getAllSeller,
   getSeller,
   isSeller,
@@ -17,5 +18,5 @@ router.route("/:sellerId").get(getSeller);
 // Admin Accessible:
 router.use("/", protect, restrictTo("admin"));
 router.route("/").get(setSellerFilter, getAllSeller);
-router.route("/:sellerId").patch(updateSeller);
+router.route("/:sellerId").patch(updateSeller).delete(deleteSeller);
 export default router;
