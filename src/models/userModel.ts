@@ -78,24 +78,10 @@ const userSchema = new Schema<IUser>(
       type: Boolean,
       default: true,
     },
-    cart: {
-      type: Schema.Types.ObjectId,
-      ref: "Cart",
-    },
-    wishlist: {
-      type: Schema.Types.ObjectId,
-      ref: "Wishlist",
-    },
     orders: [
       {
         type: Schema.Types.ObjectId,
         ref: "Order",
-      },
-    ],
-    reviews: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Review",
       },
     ],
     passwordResetToken: String,
@@ -106,6 +92,25 @@ const userSchema = new Schema<IUser>(
     timestamps: true,
   },
 );
+
+// Virtual Properties
+userSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "user",
+  localField: "_id",
+});
+
+userSchema.virtual("cart", {
+  ref: "Cart",
+  foreignField: "user",
+  localField: "_id",
+});
+
+userSchema.virtual("wishlist", {
+  ref: "Wishlist",
+  foreignField: "user",
+  localField: "_id",
+});
 
 //  ******** Pre Middlewares ***********
 // Hashing Password
