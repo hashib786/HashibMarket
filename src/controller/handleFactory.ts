@@ -4,6 +4,7 @@ import { Model } from "mongoose";
 import { catchAsync } from "../utils/catchAsync";
 import { NextFunction, Request, Response } from "express";
 import ApiFeature from "../utils/ApiFeature";
+import { AppError } from "../utils/AppError";
 
 interface IBaseDocument extends Document {
   _id: Types.ObjectId;
@@ -74,4 +75,16 @@ export const deleteOne = <T>(Model: BaseModel<T>) =>
       status: "success",
       data: null,
     });
+  });
+
+export const checkingSameUser = <T>(Model: BaseModel<T>) =>
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const model = (await Model.findById(id)) as any;
+    if (!model) return next(new AppError("Not finding model given id: ", 401));
+
+    if (model.user.toString() !== req.user.id)
+      return next(new AppError("You are not created this model: ", 401));
+
+    next();
   });
