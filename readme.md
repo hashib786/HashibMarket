@@ -153,10 +153,6 @@
 
 5. **/reviews:**
 
-   _Accessible to All Users:_
-
-   - GET /: Get a list of all reviews
-
    _Logged-In User Accessible:_
 
    - POST /:productId: Add a review for a specific product.
@@ -165,6 +161,7 @@
 
    _Admin Accessible:_
 
+   - GET /: Get a list of all reviews
    - DELETE /:reviewId: Delete any review by ID (for admin).
 
 6. **/admins:**

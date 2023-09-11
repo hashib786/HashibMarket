@@ -3,7 +3,7 @@ import mongoose, { Document, Types, Schema } from "mongoose";
 // Define the Wishlist schema
 interface Wishlist extends Document {
   user: Types.ObjectId; // Reference to User model
-  productsSaved: Types.ObjectId[]; // Array of product references
+  productsSaved: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -16,15 +16,14 @@ const wishlistSchema = new Schema<Wishlist>(
       ref: "User",
       required: [true, "A wishlist must have a user"],
     },
-    productsSaved: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
+    productsSaved: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
   },
   { timestamps: true },
 );
 
 // Create and export the Wishlist model
-export const WishlistModel = mongoose.model<Wishlist>("Wishlist", wishlistSchema);
+const Wishlist = mongoose.model<Wishlist>("Wishlist", wishlistSchema);
+export default Wishlist;
