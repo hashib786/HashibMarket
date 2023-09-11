@@ -7,6 +7,7 @@ import {
   setUserInBody,
   checkingSameWishlistUser,
   deleteWishlist,
+  clearWishlist,
 } from "../controller/wishlistController";
 
 const router = Router();
@@ -16,7 +17,8 @@ router.use("/", protect, restrictTo("user"));
 router
   .route("/")
   .post(setUserInBody, createWishlist)
-  .get(setFilterOnlySameUser, getAllUserWishlist);
+  .get(setFilterOnlySameUser, getAllUserWishlist)
+  .delete(setFilterOnlySameUser, clearWishlist);
 
 router.use("/:id", checkingSameWishlistUser);
 router.route("/:id").delete(deleteWishlist);
