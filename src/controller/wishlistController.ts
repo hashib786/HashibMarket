@@ -1,15 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Wishlist from "../models/wishlistModel";
-import {
-  checkingSameUser,
-  createOne,
-  deleteMany,
-  deleteOne,
-  getAll,
-  updateOne,
-} from "./handleFactory";
-import { catchAsync } from "../utils/catchAsync";
-import { AppError } from "../utils/AppError";
+import { checkingSameUser, createOne, deleteMany, deleteOne, getAll } from "./handleFactory";
 
 export const setUserInBody = (req: Request, res: Response, next: NextFunction) => {
   req.body.user = req.user._id;
