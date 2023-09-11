@@ -3,14 +3,22 @@ import { protect, restrictTo } from "../controller/authController";
 import {
   getAllUserWishlist,
   createWishlist,
-  setFilterOnlyLoginUser,
+  setFilterOnlySameUser,
   setUserInBody,
+  checkingSameUser,
+  deleteWishlist,
 } from "../controller/wishlistController";
 
 const router = Router();
 
 // Logged-In User Accessible:
-router.use("/", protect, restrictTo("user"), setUserInBody);
-router.route("/").post(createWishlist).get(setFilterOnlyLoginUser, getAllUserWishlist);
+router.use("/", protect, restrictTo("user", "admin"));
+router
+  .route("/")
+  .post(setUserInBody, createWishlist)
+  .get(setFilterOnlySameUser, getAllUserWishlist);
+
+router.use("/:id", checkingSameUser);
+router.route("/:id").delete(deleteWishlist);
 
 export default router;
