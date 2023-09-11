@@ -78,12 +78,6 @@ const userSchema = new Schema<IUser>(
       type: Boolean,
       default: true,
     },
-    orders: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
     passwordResetToken: String,
     passwordResetExpires: Date,
     passwordChangeAt: Date,
@@ -108,6 +102,12 @@ userSchema.virtual("cart", {
 
 userSchema.virtual("wishlist", {
   ref: "Wishlist",
+  foreignField: "user",
+  localField: "_id",
+});
+
+userSchema.virtual("orders", {
+  ref: "Order",
   foreignField: "user",
   localField: "_id",
 });
