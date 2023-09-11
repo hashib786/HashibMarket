@@ -6,6 +6,7 @@ import userRouter from "./routes/userRoutes";
 import productRouter from "./routes/productRoutes";
 import sellerRouter from "./routes/sellerRoutes";
 import wishlistRouter from "./routes/wishlistRotes";
+import cartRouter from "./routes/cartRoutes";
 import { errorController } from "./controller/errorController";
 
 const app = express();
@@ -21,6 +22,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/sellers", sellerRouter);
 app.use("/api/v1/wishlist", wishlistRouter);
+app.use("/api/v1/cart", cartRouter);
 
 // Handle Globel Error Handling
 app.use(errorController);
