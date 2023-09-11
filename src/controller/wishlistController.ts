@@ -10,7 +10,7 @@ export const setUserInBody = (req: Request, res: Response, next: NextFunction) =
 };
 
 export const setFilterOnlySameUser = (req: Request, res: Response, next: NextFunction) => {
-  if (req.user.role === "user") req.body.filter = { user: req.user._id };
+  req.body.filter = { user: req.user._id };
   next();
 };
 

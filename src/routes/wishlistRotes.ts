@@ -12,7 +12,7 @@ import {
 const router = Router();
 
 // Logged-In User Accessible:
-router.use("/", protect, restrictTo("user", "admin"));
+router.use("/", protect, restrictTo("user"));
 router
   .route("/")
   .post(setUserInBody, createWishlist)
