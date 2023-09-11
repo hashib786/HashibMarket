@@ -11,6 +11,8 @@ interface IProduct extends Document {
   categories: string; // Assuming you're using MongoDB ObjectId for references
   slug: string;
   stockQuantity: number;
+  ratingsAverage: number;
+  ratingsQuantity: number;
   seller: Types.ObjectId; // Assuming you're using MongoDB ObjectId for references
   reviews: Types.ObjectId[]; // Assuming you're using MongoDB ObjectId for references
   createdAt: Date;
@@ -60,6 +62,17 @@ const productSchema = new Schema<IProduct>(
       required: [true, "A Product must have seller"],
     },
     slug: String,
+    ratingsAverage: {
+      type: Number,
+      default: 4.5,
+      min: [1, "Rating must be above 1.0"],
+      max: [5, "Rating must be below 5.0"],
+      set: (val: number) => parseFloat(val.toFixed(1)),
+    },
+    ratingsQuantity: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );

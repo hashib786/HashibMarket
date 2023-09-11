@@ -5,6 +5,7 @@ import { catchAsync } from "../utils/catchAsync";
 import { NextFunction, Request, Response } from "express";
 import ApiFeature from "../utils/ApiFeature";
 import { AppError } from "../utils/AppError";
+import { PopulateOptions } from "mongoose";
 
 interface IBaseDocument extends Document {
   _id: Types.ObjectId;
@@ -41,11 +42,13 @@ export const createOne = <T>(Model: BaseModel<T>) =>
     });
   });
 
-export const getOne = <T>(Model: BaseModel<T>) =>
+export const getOne = <T>(Model: BaseModel<T>, papulateOption?: PopulateOptions) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const data = await Model.findById(id);
+    let query = Model.findById(id);
+    if (papulateOption) query.populate(papulateOption);
 
+    const data = await query;
     res.status(200).json({
       status: "success",
       data: { data },

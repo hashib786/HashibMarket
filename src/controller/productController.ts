@@ -27,7 +27,7 @@ export const setSellerId = (req: Request, _: Response, next: NextFunction) => {
 export const getProductWithSlug = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { slug } = req.params;
-    const product = await Product.find({ slug });
+    const product = await Product.find({ slug }).populate({ path: "reviews" });
     res.status(200).json({ status: "success", data: { data: product } });
   },
 );
@@ -47,6 +47,6 @@ export const checkingSameSeller = catchAsync(
 
 export const getAllProducts = getAll(Product);
 export const createProduct = createOne(Product);
-export const getProduct = getOne(Product);
+export const getProduct = getOne(Product, { path: "reviews" });
 export const updateProduct = updateOne(Product);
 export const deleteProduct = deleteOne(Product);
