@@ -21,6 +21,7 @@ const cartSchema = new Schema<Cart>(
       type: Schema.Types.ObjectId,
       ref: "Product",
       required: [true, "Product ID is required for the cart item."], // Added custom error message
+      unique: true,
     },
     quantity: {
       type: Number,
@@ -30,6 +31,15 @@ const cartSchema = new Schema<Cart>(
   },
   { timestamps: true },
 );
+
+cartSchema.pre(/^find/, function (this: mongoose.Query<any, any, {}, any, "find">, next) {
+  this.populate({
+    path: "product",
+    select: "name price images stockQuantity",
+  });
+
+  next();
+});
 
 // Create and export the Cart model
 const Cart = mongoose.model<Cart>("Cart", cartSchema);
