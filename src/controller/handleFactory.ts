@@ -76,6 +76,17 @@ export const deleteOne = <T>(Model: BaseModel<T>) =>
     });
   });
 
+export const deleteMany = <T>(Model: BaseModel<T>) =>
+  catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const filter = req.body.filter;
+    await Model.deleteMany(filter);
+
+    res.status(200).json({
+      status: "success",
+      data: null,
+    });
+  });
+
 export const checkingSameUser = <T>(Model: BaseModel<T>) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
