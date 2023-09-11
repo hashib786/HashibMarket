@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema, Types } from "mongoose";
+import mongoose, { Document, Model, Schema, Types } from "mongoose";
+import Product from "./productModel";
 
 // Define the Review schema
 interface Review extends Document {
@@ -10,8 +11,12 @@ interface Review extends Document {
   updatedAt: Date;
 }
 
+interface ReviewModel extends Model<Review> {
+  calcAverageRating(tourId: Types.ObjectId): void;
+}
+
 // Create the Review schema
-const reviewSchema = new Schema<Review>(
+const reviewSchema = new Schema<Review, ReviewModel>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -37,6 +42,45 @@ const reviewSchema = new Schema<Review>(
   { timestamps: true },
 );
 
+reviewSchema.static("calcAverageRating", async function (productId) {
+  const stats = await this.aggregate([
+    {
+      $match: { product: productId },
+    },
+    {
+      $group: {
+        _id: "$product",
+        nRating: { $sum: 1 },
+        avgRating: { $avg: "$rating" },
+      },
+    },
+  ]);
+
+  const { length } = stats;
+  await Product.findByIdAndUpdate(productId, {
+    ratingsAverage: length ? stats[0].avgRating : 4.5,
+    ratingsQuantity: length ? stats[0].nRating : 0,
+  });
+});
+
+reviewSchema.post("save", function (val, next) {
+  calculateAvg(val.product);
+  next();
+});
+
+reviewSchema.post(
+  /^findOne/,
+  function (this: mongoose.Query<any, any, {}, any, "find">, val, next) {
+    if (val) calculateAvg(val.product);
+    next();
+  },
+);
+
 // Create and export the Review model
-const Review = mongoose.model<Review>("Review", reviewSchema);
+const Review = mongoose.model<Review, ReviewModel>("Review", reviewSchema);
+
+function calculateAvg(productId: Types.ObjectId) {
+  Review.calcAverageRating(productId);
+}
+
 export default Review;
