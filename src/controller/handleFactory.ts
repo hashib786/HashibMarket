@@ -92,6 +92,8 @@ export const deleteMany = <T>(Model: BaseModel<T>) =>
 
 export const checkingSameUser = <T>(Model: BaseModel<T>) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    if (req.user.role === "admin") return next();
+
     const { id } = req.params;
     const model = (await Model.findById(id)) as any;
     if (!model) return next(new AppError("Not finding model given id: ", 401));
