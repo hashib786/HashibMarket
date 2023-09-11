@@ -14,7 +14,7 @@ const wishlistSchema = new Schema<Wishlist>(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: [true, "A wishlist must have a user"],
     },
     productsSaved: [
       {

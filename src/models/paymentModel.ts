@@ -17,24 +17,24 @@ const paymentSchema = new Schema<Payment>(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: [true, "User ID is required for payment."], // Added custom error message
     },
     order: {
       type: Schema.Types.ObjectId,
       ref: "Order",
-      required: true,
+      required: [true, "Order ID is required for payment."], // Added custom error message
     },
     paymentMethod: {
       type: String,
-      required: true,
+      required: [true, "Payment method is required."], // Added custom error message
     },
     transactionID: {
       type: String,
-      required: true,
+      required: [true, "Transaction ID is required for payment."], // Added custom error message
     },
     paymentStatus: {
       type: String,
-      required: true,
+      required: [true, "Payment status is required."], // Added custom error message
     },
   },
   { timestamps: true },

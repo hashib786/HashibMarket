@@ -21,26 +21,26 @@ const cartSchema = new Schema<Cart>(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: [true, "User ID is required for the cart."], // Added custom error message
     },
     products: [
       {
         product: {
           type: Schema.Types.ObjectId,
           ref: "Product",
-          required: true,
+          required: [true, "Product ID is required for the cart item."], // Added custom error message
         },
         quantity: {
           type: Number,
-          required: true,
-          min: 1, // Ensure quantity is at least 1
+          required: [true, "Quantity is required for the cart item."], // Added custom error message
+          min: [1, "Quantity must be at least 1."], // Added custom error message
         },
       },
     ],
     totalPrice: {
       type: Number,
-      required: true,
-      min: 0, // Ensure total price is non-negative
+      required: [true, "Total price is required for the cart."], // Added custom error message
+      min: [0, "Total price must be non-negative."], // Added custom error message
     },
   },
   { timestamps: true },

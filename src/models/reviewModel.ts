@@ -16,22 +16,22 @@ const reviewSchema = new Schema<Review>(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: [true, "User ID is required for a review."],
     },
     product: {
       type: Schema.Types.ObjectId,
       ref: "Product",
-      required: true,
+      required: [true, "Product ID is required for a review."],
     },
     rating: {
       type: Number,
-      required: true,
-      min: 1, // Minimum rating (e.g., 1 star)
-      max: 5, // Maximum rating (e.g., 5 stars)
+      required: [true, "Rating is required for a review."],
+      min: [1, "Minimum rating is 1 star."],
+      max: [5, "Maximum rating is 5 stars."],
     },
     comment: {
       type: String,
-      required: true,
+      required: [true, "Comment is required for a review."],
     },
   },
   { timestamps: true },

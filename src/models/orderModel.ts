@@ -44,22 +44,22 @@ const orderSchema = new Schema<Order>(
         quantity: {
           type: Number,
           required: [true, "Order must have quantity"],
-          min: 1, // Ensure quantity is at least 1
+          min: [1, "Quantity must be at least 1"], // Custom message for min constraint
           default: 1,
         },
       },
     ],
     totalPrice: {
       type: Number,
-      required: true,
-      min: 0, // Ensure total price is non-negative
+      required: [true, "Total price is required"],
+      min: [0, "Total price must be non-negative"], // Custom message for min constraint
     },
     orderStatus: {
       type: String,
-      required: true,
+      required: [true, "Order status is required"],
       enum: {
         values: ["Processing", "Shipped", "Out for Delivery", "Delivered"],
-        message: `Please give statuse "Processing" | "Shipped" | "Out for Delivery" | "Delivered" One of them`,
+        message: "Invalid order status value",
       },
       default: "Processing",
     },
@@ -68,28 +68,28 @@ const orderSchema = new Schema<Order>(
         {
           street: {
             type: String,
-            required: true,
+            required: [true, "Street address is required"],
           },
           city: {
             type: String,
-            required: true,
+            required: [true, "City is required"],
           },
           state: {
             type: String,
-            required: true,
+            required: [true, "State is required"],
           },
           postalCode: {
             type: String,
-            required: true,
+            required: [true, "Postal code is required"],
           },
           country: {
             type: String,
-            required: true,
+            required: [true, "Country is required"],
           },
         },
         { _id: false }, // Exclude _id field from ShippingAddress
       ),
-      required: true,
+      required: [true, "Shipping address is required"],
     },
   },
   { timestamps: true },
