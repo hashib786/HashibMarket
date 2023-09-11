@@ -4,6 +4,7 @@ import { setFilterOnlySameUser, setUserInBody } from "../controller/wishlistCont
 import {
   checkingSameCartUser,
   createCart,
+  deleteCart,
   getAllUserCart,
   updateCart,
 } from "../controller/cartController";
@@ -15,6 +16,6 @@ router.use("/", protect, restrictTo("user"));
 router.route("/").post(setUserInBody, createCart).get(setFilterOnlySameUser, getAllUserCart);
 
 router.use("/:id", checkingSameCartUser);
-router.route("/:id").patch(updateCart);
+router.route("/:id").patch(updateCart).delete(deleteCart);
 
 export default router;

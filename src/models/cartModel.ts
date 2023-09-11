@@ -21,7 +21,6 @@ const cartSchema = new Schema<Cart>(
       type: Schema.Types.ObjectId,
       ref: "Product",
       required: [true, "Product ID is required for the cart item."], // Added custom error message
-      unique: true,
     },
     quantity: {
       type: Number,

@@ -5,7 +5,7 @@ import {
   createWishlist,
   setFilterOnlySameUser,
   setUserInBody,
-  checkingSameUser,
+  checkingSameWishlistUser,
   deleteWishlist,
 } from "../controller/wishlistController";
 
@@ -18,7 +18,7 @@ router
   .post(setUserInBody, createWishlist)
   .get(setFilterOnlySameUser, getAllUserWishlist);
 
-router.use("/:id", checkingSameUser);
+router.use("/:id", checkingSameWishlistUser);
 router.route("/:id").delete(deleteWishlist);
 
 export default router;
