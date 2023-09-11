@@ -59,14 +59,17 @@ const productSchema = new Schema<IProduct>(
       ref: "User", // Reference to your Seller model
       required: [true, "A Product must have seller"],
     },
-    reviews: {
-      type: [Schema.Types.ObjectId],
-      ref: "Review", // Reference to your Review model
-    },
     slug: String,
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
+
+// Virtual Properties
+productSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "product",
+  localField: "_id",
+});
 
 // ******* Pre Middleware *********
 productSchema.pre("save", function (next) {
