@@ -24,6 +24,11 @@ const wishlistSchema = new Schema<Wishlist>(
   { timestamps: true },
 );
 
+wishlistSchema.pre(/^find/, function (this: mongoose.Query<any, any, {}, any, "find">, next) {
+  this.populate({ path: "productsSaved", select: "name price image" });
+  next();
+});
+
 // Create and export the Wishlist model
 const Wishlist = mongoose.model<Wishlist>("Wishlist", wishlistSchema);
 export default Wishlist;
