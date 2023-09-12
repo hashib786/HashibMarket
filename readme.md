@@ -141,6 +141,13 @@
    - DELETE /:sellerId: Delete a seller by ID (for admin).
 
 4. **/orders:**
+
+   _Logged-In User Accessible:_
+
+   - POST /: Place a new order.
+   - GET /: Get order history for the logged-in user.
+   - GET /:orderId: Get details about a specific order.
+
    _Seller Accessible:_
 
    - GET /seller: Get order history for the seller's products.
@@ -161,7 +168,7 @@
 
    _Admin Accessible:_
 
-   - GET /: Get a list of all reviews
+   - GET /: Get a list of all reviews.
    - DELETE /:reviewId: Delete any review by ID (for admin).
 
 6. **/admins:**
@@ -187,6 +194,7 @@
    - DELETE /reviews/:reviewId: Delete any review by ID (for admin).
 
 7. **/payments:**
+
    _Logged-In User Accessible:_
 
    - POST /create: Create a new payment for an order.

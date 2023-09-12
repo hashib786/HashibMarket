@@ -6,7 +6,7 @@ interface IProduct extends Document {
   name: string;
   description: string;
   price: number;
-  discountPrice: number;
+  discountPrice: number | undefined;
   images: string[];
   categories: string; // Assuming you're using MongoDB ObjectId for references
   slug: string;
