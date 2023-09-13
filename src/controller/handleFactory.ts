@@ -13,6 +13,17 @@ interface IBaseDocument extends Document {
 
 type BaseModel<T> = Model<T, {}, {}, {}, Document<unknown, {}, T> & T & IBaseDocument, any>;
 
+export const setFilterOnlySameUser = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user.role === "admin") return next();
+  req.body.filter = { user: req.user._id };
+  next();
+};
+
+export const setUserInBody = (req: Request, res: Response, next: NextFunction) => {
+  req.body.user = req.user._id;
+  next();
+};
+
 export const getAll = <T>(Model: BaseModel<T>) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     let filter = {};

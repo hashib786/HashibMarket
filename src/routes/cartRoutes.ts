@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { protect, restrictTo } from "../controller/authController";
-import { setFilterOnlySameUser, setUserInBody } from "../controller/wishlistController";
 import {
   checkingSameCartUser,
   clearCart,
@@ -9,6 +8,7 @@ import {
   getAllUserCart,
   updateCart,
 } from "../controller/cartController";
+import { setFilterOnlySameUser, setUserInBody } from "../controller/handleFactory";
 
 const router = Router();
 

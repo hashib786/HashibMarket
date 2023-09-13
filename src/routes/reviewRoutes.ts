@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { protect, restrictTo } from "../controller/authController";
-import { setUserInBody } from "../controller/wishlistController";
 import {
   checkingSameReviewUser,
   createReview,
   deleteReview,
   updateReview,
 } from "../controller/reviewController";
+import { setUserInBody } from "../controller/handleFactory";
 
 const router = Router();
 

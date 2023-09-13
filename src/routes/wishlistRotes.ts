@@ -3,12 +3,11 @@ import { protect, restrictTo } from "../controller/authController";
 import {
   getAllUserWishlist,
   createWishlist,
-  setFilterOnlySameUser,
-  setUserInBody,
   checkingSameWishlistUser,
   deleteWishlist,
   clearWishlist,
 } from "../controller/wishlistController";
+import { setFilterOnlySameUser, setUserInBody } from "../controller/handleFactory";
 
 const router = Router();
 

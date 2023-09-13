@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { protect, restrictTo } from "../controller/authController";
 import { createOrder, getAllOrder } from "../controller/orderController";
-import { setFilterOnlySameUser, setUserInBody } from "../controller/wishlistController";
+import { setFilterOnlySameUser, setUserInBody } from "../controller/handleFactory";
 
 const router = Router();
 
