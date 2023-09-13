@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Order, { IOrder } from "../models/orderModel";
 import { catchAsync } from "../utils/catchAsync";
-import { checkingSameUser, getAll, getOne } from "./handleFactory";
+import { checkingSameUser, getAll, getOne, updateOne } from "./handleFactory";
 import { AppError } from "../utils/AppError";
 
 export const createOrder = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -76,3 +76,4 @@ export const getOrderDetailsForSeller = catchAsync(
 export const getAllOrder = getAll(Order);
 export const checkingSameOrderUser = checkingSameUser(Order);
 export const getOrder = getOne(Order);
+export const updateOrder = updateOne(Order);

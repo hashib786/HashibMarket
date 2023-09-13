@@ -7,6 +7,7 @@ import {
   getOrder,
   getOrderDetailsForSeller,
   sellerOrder,
+  updateOrder,
 } from "../controller/orderController";
 import { setFilterOnlySameUser, setUserInBody } from "../controller/handleFactory";
 
@@ -23,5 +24,8 @@ router.route("/:id").get(restrictTo("user", "admin"), checkingSameOrderUser, get
 // Seller Accessible:
 router.route("/seller/product").get(restrictTo("seller"), sellerOrder);
 router.route("/seller/product/:orderId").get(restrictTo("seller"), getOrderDetailsForSeller);
+
+// Admin Accessible:
+router.route("/:id").patch(restrictTo("admin"), updateOrder);
 
 export default router;
