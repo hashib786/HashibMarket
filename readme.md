@@ -150,8 +150,8 @@
 
    _Seller Accessible:_
 
-   - GET /seller: Get order history for the seller's products.
-   - GET /seller/:orderId: Get details about a specific order associated with the seller's products.
+   - GET /seller/product: Get order history for the seller's products.
+   - GET /seller//product:orderId: Get details about a specific order associated with the seller's products.
 
    _Admin Accessible:_
 
