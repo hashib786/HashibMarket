@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Order from "../models/orderModel";
 import { catchAsync } from "../utils/catchAsync";
-import { getAll } from "./handleFactory";
+import { checkingSameUser, getAll, getOne } from "./handleFactory";
 
 export const createOrder = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const createdOrder = await Order.create(req.body);
@@ -15,3 +15,5 @@ export const createOrder = catchAsync(async (req: Request, res: Response, next: 
 });
 
 export const getAllOrder = getAll(Order);
+export const checkingSameOrderUser = checkingSameUser(Order);
+export const getOrder = getOne(Order);
