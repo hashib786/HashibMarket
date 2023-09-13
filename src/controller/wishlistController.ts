@@ -8,6 +8,7 @@ export const setUserInBody = (req: Request, res: Response, next: NextFunction) =
 };
 
 export const setFilterOnlySameUser = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user.role === "admin") return next();
   req.body.filter = { user: req.user._id };
   next();
 };
