@@ -42,11 +42,11 @@ export const createOne = <T>(Model: BaseModel<T>) =>
     });
   });
 
-export const getOne = <T>(Model: BaseModel<T>, papulateOption?: PopulateOptions) =>
+export const getOne = <T>(Model: BaseModel<T>, populateOption?: PopulateOptions) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     let query = Model.findById(id);
-    if (papulateOption) query.populate(papulateOption);
+    if (populateOption) query.populate(populateOption);
 
     const data = await query;
     res.status(200).json({

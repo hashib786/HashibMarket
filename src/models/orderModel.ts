@@ -106,8 +106,8 @@ orderSchema.post("save", async function (val, next) {
     const productData = await Product.findById(product);
     console.log({ productData });
     if (productData) {
-      const discont = productData.discountPrice;
-      totalPrice += (productData.price - (discont ? discont : 0)) * quantity;
+      const discount = productData.discountPrice;
+      totalPrice += (productData.price - (discount ? discount : 0)) * quantity;
     } else error += ` this Product ID : ${product} is Not Valid. `;
   });
 
