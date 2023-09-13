@@ -6,7 +6,7 @@ import { AppError } from "../utils/AppError";
 interface Product {
   product: Types.ObjectId; // Reference to Product model
   quantity: number;
-  afterDiscount: number | undefined;
+  afterDiscount: number;
   seller: Types.ObjectId;
 }
 

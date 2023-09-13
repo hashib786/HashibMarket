@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Order, { IOrder } from "../models/orderModel";
 import { catchAsync } from "../utils/catchAsync";
 import { checkingSameUser, getAll, getOne } from "./handleFactory";
+import { AppError } from "../utils/AppError";
 
 export const createOrder = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const createdOrder = await Order.create(req.body);
@@ -41,6 +42,36 @@ export const sellerOrder = catchAsync(async (req: Request, res: Response, next: 
     data: { sellerOrders },
   });
 });
+
+export const getOrderDetailsForSeller = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { orderId } = req.params;
+
+    // Find the order by ID
+    const order = await Order.findById(orderId).populate({
+      path: "products.product",
+      select: "-__v",
+    });
+
+    if (!order) {
+      return next(new AppError("Order not found", 404));
+    }
+
+    let totalPrice = 0;
+    const products = order.products.filter((product) => {
+      if (product.seller.toString() === req.user.id) {
+        totalPrice += product.afterDiscount;
+        return true;
+      }
+      return false;
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: { totalPrice, products },
+    });
+  },
+);
 
 export const getAllOrder = getAll(Order);
 export const checkingSameOrderUser = checkingSameUser(Order);
