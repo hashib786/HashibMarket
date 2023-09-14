@@ -6,7 +6,7 @@ interface Payment extends Document {
   order: Types.ObjectId; // Reference to Order model
   paymentMethod: string; // Payment method used, e.g., credit card, PayPal, etc.
   transactionID: string; // Unique transaction ID associated with the payment
-  paymentStatus: string; // Payment status, e.g., "Paid," "Pending," "Failed," etc.
+  paymentStatus: "Paid" | "Pending" | "Failed"; // Payment status, e.g., "Paid," "Pending," "Failed," etc.
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,6 +27,11 @@ const paymentSchema = new Schema<Payment>(
     paymentMethod: {
       type: String,
       required: [true, "Payment method is required."], // Added custom error message
+      enum: {
+        values: ["Paid", "Pending", "Failed"],
+        message: "Payment method is not supported",
+      },
+      default: "Pending",
     },
     transactionID: {
       type: String,
