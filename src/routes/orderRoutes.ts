@@ -26,6 +26,7 @@ router.route("/seller/product").get(restrictTo("seller"), sellerOrder);
 router.route("/seller/product/:orderId").get(restrictTo("seller"), getOrderDetailsForSeller);
 
 // Admin Accessible:
+// seller not update because in order there another seller also available so not write to update order status by any other seller
 router.route("/:id").patch(restrictTo("admin"), updateOrder);
 
 export default router;
