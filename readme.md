@@ -221,3 +221,5 @@
    - GET /: Get the user's wishlist.
    - POST /: Add a product to the user's wishlist.
    - DELETE /:productId: Remove a product from the user's wishlist.
+
+10. **Also need to add redis**
